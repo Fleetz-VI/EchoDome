@@ -1,0 +1,6 @@
+@EchoDome.API_HostAddress = http://localhost:5249
+
+GET {{EchoDome.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
