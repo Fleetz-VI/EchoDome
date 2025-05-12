@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoDome.API", "EchoDome.API\EchoDome.API.csproj", "{E04B8B62-B04D-4914-BE7A-6762604D446D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E04B8B62-B04D-4914-BE7A-6762604D446D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04B8B62-B04D-4914-BE7A-6762604D446D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04B8B62-B04D-4914-BE7A-6762604D446D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04B8B62-B04D-4914-BE7A-6762604D446D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D463A9B9-1F7A-40ED-B60A-C07CCE3BE98B}
+	EndGlobalSection
+EndGlobal
