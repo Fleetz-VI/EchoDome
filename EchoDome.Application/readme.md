@@ -34,7 +34,7 @@ EchoDome.Application/
 
 ## 🔌 Dependencies
 
-- None
+- `EchoDome.Domain`
 
 ---
 
