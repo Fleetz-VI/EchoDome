@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EchoDome.Application\EchoDome.Application.csproj" />
+    <ProjectReference Include="..\EchoDome.Domain\EchoDome.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
