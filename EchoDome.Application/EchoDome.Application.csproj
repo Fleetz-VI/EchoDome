@@ -10,4 +10,10 @@
     <ProjectReference Include="..\EchoDome.Domain\EchoDome.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="UseCases\" />
+  </ItemGroup>
+
 </Project>

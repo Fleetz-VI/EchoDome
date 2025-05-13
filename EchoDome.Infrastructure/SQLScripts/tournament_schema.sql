@@ -1,0 +1,109 @@
+
+-- UserRoles
+CREATE TABLE UserRoles (
+    Id INT PRIMARY KEY IDENTITY,
+    Code NVARCHAR(50) NOT NULL,
+    DisplayName NVARCHAR(100) NOT NULL
+);
+
+-- Users
+CREATE TABLE [User] (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    Email NVARCHAR(255) UNIQUE NOT NULL,
+    HashedPassword NVARCHAR(255) NOT NULL,
+    DisplayName NVARCHAR(100) NOT NULL,
+    Points INT NOT NULL,
+    RoleId INT NOT NULL FOREIGN KEY REFERENCES UserRoles(Id),
+    CreatedAt DATETIME2 NOT NULL
+);
+
+-- Faction
+CREATE TABLE Faction (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL
+);
+
+-- Participant
+CREATE TABLE Participant (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    ImageUrl NVARCHAR(255),
+    FactionId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Faction(Id),
+    MatchCount INT NOT NULL,
+    Wins INT NOT NULL,
+    TournamentWins INT NOT NULL
+);
+
+-- TournamentTypes
+CREATE TABLE TournamentTypes (
+    Id INT PRIMARY KEY IDENTITY,
+    Code NVARCHAR(50) NOT NULL,
+    DisplayName NVARCHAR(100) NOT NULL
+);
+
+-- Season
+CREATE TABLE Season (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    StartDate DATETIME2 NOT NULL,
+    EndDate DATETIME2
+);
+
+-- Tournament
+CREATE TABLE Tournament (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    TournamentTypeId INT FOREIGN KEY REFERENCES TournamentTypes(Id),
+    StartDate DATETIME2 NOT NULL,
+    EndDate DATETIME2,
+    ChampionParticipantId UNIQUEIDENTIFIER,
+    WinnerFactionId UNIQUEIDENTIFIER,
+    SeasonId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Season(Id),
+    IsCompleted BIT NOT NULL
+);
+
+-- Match
+CREATE TABLE [Match] (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    TournamentId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Tournament(Id),
+    RoundNumber INT NOT NULL,
+    ParticipantAId UNIQUEIDENTIFIER,
+    ParticipantBId UNIQUEIDENTIFIER,
+    WinnerId UNIQUEIDENTIFIER,
+    CompletedAt DATETIME2
+);
+
+-- BetType
+CREATE TABLE BetType (
+    Id INT PRIMARY KEY IDENTITY,
+    Code NVARCHAR(50) NOT NULL,
+    DisplayName NVARCHAR(100) NOT NULL
+);
+
+-- Bet
+CREATE TABLE Bet (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    BetTypeId INT FOREIGN KEY REFERENCES BetType(Id),
+    UserId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES [User](Id),
+    MatchId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES [Match](Id),
+    ParticipantId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Participant(Id),
+    PointsWagered INT NOT NULL,
+    Won BIT,
+    PayoutAmount INT,
+    PlacedAt DATETIME2 NOT NULL
+);
+
+-- BetReason
+CREATE TABLE BetReason (
+    Id INT PRIMARY KEY IDENTITY,
+    Code NVARCHAR(50) NOT NULL,
+    DisplayName NVARCHAR(100) NOT NULL
+);
+
+-- PointsTransaction
+CREATE TABLE PointsTransaction (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    UserId UNIQUEIDENTIFIER FOREIGN KEY REFERENCES [User](Id),
+    Amount INT NOT NULL,
+    BetReasonId INT FOREIGN KEY REFERENCES BetReason(Id),
+    CreatedAt DATETIME2 NOT NULL
+);

@@ -11,4 +11,11 @@
     <ProjectReference Include="..\EchoDome.Domain\EchoDome.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Persistence\" />
+    <Folder Include="SQLScripts\" />
+  </ItemGroup>
+
 </Project>

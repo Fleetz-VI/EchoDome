@@ -11,9 +11,7 @@ The domain layer for EchoDome. This project contains the core domain models used
 ## Key Folders
 
 - `Entities/` – Core domain models
-- `ValueObjects/` – Strongly typed structures like `Points`, `Faction`
 - `Enums/` – Static domain constants
-- `Events/` – Domain events, e.g., `ChampionChangedEvent`
 
 ## Dependencies
 
