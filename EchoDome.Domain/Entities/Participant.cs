@@ -14,6 +14,7 @@ namespace EchoDome.Domain.Entities
         public int MatchCount { get; set; }
         public int Wins { get; set; }
         public int TournamentWins { get; set; }
+
         public Guid FactionId { get; set; }
         public Faction Faction { get; set; } = default!;
     }
