@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using EchoDome.Infrastructure.Persistence;
-using EchoDome.Application.Interfaces; // For IRepository or service interfaces
-//using EchoDome.Infrastructure.Repositories;
-using EchoDome.Infrastructure.Services;
+using EchoDome.Infrastructure.Repositories;
+//using EchoDome.Infrastructure.Services;
+using EchoDome.Application.Interfaces.Repositories;
 
 namespace EchoDome.Infrastructure.DependencyInjection
 {
@@ -23,9 +18,11 @@ namespace EchoDome.Infrastructure.DependencyInjection
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             // Register your repositories and service implementations here
-            //services.AddScoped<ITournamentService, TournamentService>();
-            //services.AddScoped<IBetService, BetService>();
-            services.AddScoped<IParticipantService, ParticipantService>();
+            //services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IParticipantRepository, ParticipantRepository>();
+            //services.AddScoped<ISeasonRepository, SeasonRepository>();
+            //services.AddScoped<ITournamentRepository, TournamentRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

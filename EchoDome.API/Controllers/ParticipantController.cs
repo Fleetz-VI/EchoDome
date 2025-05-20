@@ -1,4 +1,5 @@
-﻿using EchoDome.Application.Interfaces;
+﻿using EchoDome.Application.Interfaces.Repositories;
+using EchoDome.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EchoDome.API.Controllers
@@ -15,9 +16,9 @@ namespace EchoDome.API.Controllers
         }
 
         [HttpGet("stats")]
-        public async Task<IActionResult> GetStats()
+        public async Task<IActionResult> GetStats(CancellationToken cancellationToken)
         {
-            var stats = await _participantService.GetParticipantStatsAsync();
+            var stats = await _participantService.GetParticipantStatsAsync(cancellationToken);
             return Ok(stats);
         }
     }
