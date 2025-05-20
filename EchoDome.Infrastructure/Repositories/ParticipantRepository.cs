@@ -26,5 +26,27 @@ namespace EchoDome.Infrastructure.Repositories
                 .ToListAsync(ct);
         }
 
+        public async Task<Participant?> GetByIdAsync(Guid id, CancellationToken ct)
+        {
+            return await _context.Participants
+                .Include(p => p.Faction)
+                .FirstOrDefaultAsync(p => p.Id == id, ct);
+        }
+
+        public async Task UpdateParticipantAsync(Participant participant, CancellationToken ct)
+        {
+            _context.Participants.Update(participant);
+            await _context.SaveChangesAsync(ct);
+        }
+
+        public async Task<Guid> CreateParticipantAsync(Participant participant, CancellationToken ct)
+        {
+            if (participant is null)
+                throw new ArgumentNullException(nameof(participant));
+
+            await _context.Participants.AddAsync(participant);
+            await _context.SaveChangesAsync(ct);
+            return participant.Id;
+        }
     }
 }

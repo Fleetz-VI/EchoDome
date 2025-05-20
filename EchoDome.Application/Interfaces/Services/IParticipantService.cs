@@ -1,4 +1,4 @@
-﻿using EchoDome.Application.DTOs;
+﻿using EchoDome.Application.DTOs.Participants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +11,11 @@ namespace EchoDome.Application.Interfaces.Services
 {
     public interface IParticipantService
     {
-        Task<List<ParticipantStatsDto>> GetParticipantStatsAsync(CancellationToken cancellationToken);
+        // TODO: Add filtering/paging/sorting
+        Task<List<ParticipantStatsDTO>> GetParticipantStatsAsync(CancellationToken cancellationToken);
+        
+        Task UpdateParticipantStatsAsync(Guid participantId, ParticipantStatsUpdateDTO dto, CancellationToken cancellationToken);
+
+        Task<Guid> CreateParticipantAsync(CreateParticipantDTO dto, CancellationToken cancellationToken);
     }
 }

@@ -11,5 +11,8 @@ namespace EchoDome.Application.Interfaces.Repositories
     public interface IParticipantRepository
     {
         Task<List<Participant>> GetAllWithFactionAsync(CancellationToken ct);
+        Task UpdateParticipantAsync(Participant participant, CancellationToken ct);
+        Task<Participant?> GetByIdAsync(Guid id, CancellationToken ct);
+        Task<Guid> CreateParticipantAsync(Participant participant, CancellationToken ct);
     }
 }
