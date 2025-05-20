@@ -1,4 +1,4 @@
-﻿using EchoDome.Domain.Entities;
+﻿using EchoDome.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +11,6 @@ namespace EchoDome.Application.Interfaces.Services
 {
     public interface IParticipantService
     {
-        Task<List<Participant>> GetParticipantStatsAsync(CancellationToken cancellationToken);
+        Task<List<ParticipantStatsDto>> GetParticipantStatsAsync(CancellationToken cancellationToken);
     }
 }

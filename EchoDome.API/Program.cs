@@ -1,3 +1,4 @@
+using EchoDome.Application.DependencyInjection;
 using EchoDome.Infrastructure.DependencyInjection;
 using EchoDome.Infrastructure.Persistence;
 
@@ -10,6 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// Register services from the Application layer
+builder.Services.AddApplication();
+
+// Register services from the Infrastructure layer (Repositories, DbContext, etc.)
 builder.Services.AddInfrastructure(builder.Configuration);
 
 
