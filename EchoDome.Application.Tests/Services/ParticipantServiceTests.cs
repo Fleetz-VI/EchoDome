@@ -32,20 +32,62 @@ namespace EchoDome.Application.Tests.Services
                     Wins = 6,
                     TournamentWins = 2,
                     Faction = new Faction { Name = "Red" }
+                },
+                new Participant
+                {
+                    Name = "Bravo",
+                    MatchCount = 0,
+                    Wins = 0,
+                    TournamentWins = 0,
+                    Faction = null
                 }
             };
 
             _repoMock.Setup(r => r.GetAllWithFactionAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(participants);
+                     .ReturnsAsync(participants);
 
             // Act
             var result = await _service.GetParticipantStatsAsync(CancellationToken.None);
 
             // Assert
-            result.Should().HaveCount(1);
+            result.Should().HaveCount(2);
             result[0].Name.Should().Be("Alpha");
             result[0].WinRate.Should().Be(60.0);
-            result[0].Faction.Should().Be("Red");
+            result[1].Faction.Should().Be(string.Empty);
+        }
+
+        [Fact]
+        public async Task UpdateParticipantStatsAsync_ShouldUpdateAndCallRepo()
+        {
+            // Arrange
+            var participantId = Guid.NewGuid();
+            var participant = new Participant { Id = participantId, Name = "OldName" };
+
+            var dto = new ParticipantStatsUpdateDTO(Guid.NewGuid(), "NewName", "test", 5, 3, 1, Guid.NewGuid());
+
+            _repoMock.Setup(r => r.GetByIdAsync(participantId, It.IsAny<CancellationToken>()))
+                     .ReturnsAsync(participant);
+
+            // Act
+            await _service.UpdateParticipantStatsAsync(participantId, dto, CancellationToken.None);
+
+            // Assert
+            participant.Name.Should().Be("NewName");
+            participant.MatchCount.Should().Be(5);
+            participant.Wins.Should().Be(3);
+            participant.TournamentWins.Should().Be(1);
+            participant.FactionId.Should().Be(dto.FactionId.Value);
+            participant.ImageUrl.Should().Be(dto.ImageUrl);
+
+            _repoMock.Verify(r => r.UpdateParticipantAsync(participant, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateParticipantStatsAsync_ShouldThrow_IfDtoIsNull()
+        {
+            var act = () => _service.UpdateParticipantStatsAsync(Guid.NewGuid(), null!, CancellationToken.None);
+
+            await act.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
@@ -63,16 +105,59 @@ namespace EchoDome.Application.Tests.Services
         }
 
         [Fact]
-        public async Task CreateParticipantAsync_ShouldReturnNewId()
+        public async Task UpdateParticipantStatsAsync_ShouldThrow_IfWinsExceedMatches()
         {
-            var dto = new CreateParticipantDTO { Name = "Beta", MatchCount = 5, Wins = 3 };
+            var participant = new Participant { Id = Guid.NewGuid() };
+
+            var dto = new ParticipantStatsUpdateDTO(Guid.NewGuid(), null, null, 3, 5, null, null);
+
+
+            _repoMock.Setup(r => r.GetByIdAsync(participant.Id, It.IsAny<CancellationToken>()))
+                     .ReturnsAsync(participant);
+
+            var act = () => _service.UpdateParticipantStatsAsync(participant.Id, dto, CancellationToken.None);
+
+            await act.Should().ThrowAsync<ArgumentException>();
+        }
+
+        [Fact]
+        public async Task CreateParticipantAsync_ShouldCreate_AndReturnId()
+        {
+            var dto = new CreateParticipantDTO
+            {
+                Name = "NewParticipant",
+                MatchCount = 2,
+                Wins = 1,
+                TournamentWins = 0,
+                FactionId = Guid.NewGuid(),
+                ImageUrl = "http://url"
+            };
+
+            var newId = Guid.NewGuid();
 
             _repoMock.Setup(r => r.CreateParticipantAsync(It.IsAny<Participant>(), It.IsAny<CancellationToken>()))
-                     .ReturnsAsync(Guid.NewGuid());
+                     .ReturnsAsync(newId);
 
-            var id = await _service.CreateParticipantAsync(dto, CancellationToken.None);
+            var result = await _service.CreateParticipantAsync(dto, CancellationToken.None);
 
-            id.Should().NotBeEmpty();
+            result.Should().Be(newId);
+
+            _repoMock.Verify(r => r.CreateParticipantAsync(It.Is<Participant>(p =>
+                p.Name == dto.Name &&
+                p.MatchCount == dto.MatchCount &&
+                p.Wins == dto.Wins &&
+                p.TournamentWins == dto.TournamentWins &&
+                p.FactionId == dto.FactionId &&
+                p.ImageUrl == dto.ImageUrl
+            ), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task CreateParticipantAsync_ShouldThrow_IfDtoIsNull()
+        {
+            var act = () => _service.CreateParticipantAsync(null!, CancellationToken.None);
+
+            await act.Should().ThrowAsync<ArgumentNullException>();
         }
     }
 }
